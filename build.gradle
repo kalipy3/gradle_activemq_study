@@ -45,6 +45,6 @@ dependencies {
 }
 application {
     // Define the main class for the application.
-    //mainClassName = 'com.ly.App'
-    mainClassName = 'com.ly.JmsProduce'
+//  mainClassName = 'com.ly.JmsProduce'
+    mainClassName = 'com.ly.JmsConsumer'
 }

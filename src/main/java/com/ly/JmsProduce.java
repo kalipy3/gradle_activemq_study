@@ -17,16 +17,23 @@ public class JmsProduce {
     public static String QUEUE_NAME = "queue01";
 
     public static void main(String[] args) throws JMSException {
+        //1.创建连接工厂，采用默认的用户名和密码
         ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
+        //2.获取connection
         Connection  connection = activeMQConnectionFactory.createConnection();
         connection.start();
 
+        //3.两个参数，分别为事务/签收
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        //4.创建目的地(队列/整体topic)
         Queue queue = session.createQueue(QUEUE_NAME);
 
+        //5.创建消息的生产者
         MessageProducer messageProducer = session.createProducer(queue);
 
+        //6.生产三条消息发送到mq队列
         for (int i = 1; i <= 3; i++) {
+            //7.创建消息
             TextMessage textMessage = session.createTextMessage("msg---" + i);
             messageProducer.send(textMessage);
         }
