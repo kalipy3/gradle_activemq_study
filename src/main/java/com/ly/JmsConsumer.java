@@ -47,7 +47,7 @@ public class JmsConsumer
         session.close();
         connection.close();*/
 
-        //监听方式 
+        //监听方式 异步 
         messageConsumer.setMessageListener(new MessageListener() {
             public void onMessage(Message message) {
                 if (null != message && message instanceof TextMessage) {
@@ -65,7 +65,22 @@ public class JmsConsumer
         messageConsumer.close();
         session.close();
         connection.close();
+        /*
+         *1 先生产，    只启动1号消费者。问题：1号消费者可以消费消息吗？
+            Y
+
+            2 先生产，  先启动1号消费者再启动2号消费者，问题：2号消费者还可以消费消息吗？
+                2.1 1号可以消费 Y
+                2.1 2号可以消费吗？N
+            
+            3 先启动2个消费者，再生产6条消息，请问，消费情况如何？
+                3.1 2个消费者都有6条消息
+                3.2 先到先得，6条全给一个
+                3.3 一人一半 Y
+         *
+         * /
     }
+
 
 }
 
