@@ -78,9 +78,7 @@ public class JmsConsumer
                 3.2 先到先得，6条全给一个
                 3.3 一人一半 Y
          *
-         * /
+         */
     }
-
-
 }
 
