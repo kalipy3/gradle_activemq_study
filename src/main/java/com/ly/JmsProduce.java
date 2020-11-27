@@ -32,7 +32,7 @@ public class JmsProduce {
 
         //5.创建消息的生产者
         MessageProducer messageProducer = session.createProducer(queue);
-        messageProducer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+        messageProducer.setDeliveryMode(DeliveryMode.PERSISTENT);
 
         //6.生产三条消息发送到mq队列
         for (int i = 1; i <= 3; i++) {
