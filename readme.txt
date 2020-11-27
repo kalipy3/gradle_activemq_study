@@ -4,23 +4,47 @@ readme.txt
 :Email: kalipy@debian
 :Date: 2020-11-25 21:43
 
-1.activemq.xml恢复到以前没nio时候的
+JDBC消息存储：
+    1.安装mysql
 
-2.MQ的高可用：
-    1.事务
-    2.持久 --->activemq自带
-    3.签收
+    2.添加mysql数据库的驱动包到mq的lib文件夹
+        cp /home/kalipy/.gradle/caches/modules-2/files-2.1/mysql/mysql-connector-java/8.0.12/8e201602cc1ddd145c4c74e67d4002d3d4b1796/mysql-connector-java-8.0.12.jar /home/kalipy/下载/apache-activemq-5.16.0/apache-activemq-5.16.0/lib/.
 
-    4.可持久化 --->另一台机器上的mysql等数据库
+    3.jdbcPersistenceAdapter配置，activemq.xml中，注释kahaDB，加入jdbc的
+        <!--
+        <persistenceAdapter>
+            <kahaDB directory="${activemq.data}/kahadb"/>
+            </persistenceAdapter>
+        -->
+        <persistenceAdapter>
+            <jdbcPersistenceAdapter dataSource="#mysql-ds"/>
+        </persistenceAdapter>
 
-可持久化：
-    什么是持久化？
-        mq服务器down机了，消息不会丢失的机制
+        然后配置mysql的驱动位置：
+        <bean id="mysql-ds" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+           <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+           <property name="url" value="jdbc:mysql://localhost/activemq"/>
+           <property name="username" value="activemq"/>
+           <property name="password" value="activemq"/>
+           <property name="poolPreparedStatements" value="true"/>
+         </bean>
 
-    有哪些？
-        有JDBC AMQ KahaDB(mq默认) LevelDB等
+    4.数据库连接池配置
 
-    原理：
-        在发送消息的时候，mq服务器首先将消息存储到本地数据文件、内存数据库或者远程数据库等，再试图将消息发送给接受者，成功则将消息从存储中删除，失败则继续尝试发送
-        mq服务器启动后首先检查指定的存储位置，如果有未发送成功的消息，则需要把消息发送出去
+    5.建库建表
+        库一定要手动建：
+            create database activemq
+        表mq会自动建
+
+    6.代码运行验证
+        一定要开启setDeliveryMode()持久化
+
+    7.查看数据库情况
+
+
+在点对点模型(queue)中
+    当DeliveryMode设置为NON_PERSISTENCE时，消息被保存在内存中
+    当DeliveryMode设置为PERSISTENCE时，消息被保存在brokder的相应文件里或DB中
+
+    消息一旦被消费，就会从broker或DB中删除
 
