@@ -36,6 +36,7 @@ public class JmsProduce {
         for (int i = 1; i <= 3; i++) {
             //7.创建消息
             TextMessage textMessage = session.createTextMessage("msg---" + i);
+            textMessage.setStringProperty("c01", "vip");
             messageProducer.send(textMessage);
 
             MapMessage mapMessage = session.createMapMessage();

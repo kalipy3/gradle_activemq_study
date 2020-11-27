@@ -55,6 +55,7 @@ public class JmsConsumer
                     TextMessage textMessage = (TextMessage) message;
                     try {
                         System.out.println("消费者接收到消息："+textMessage.getText());
+                        System.out.println("消费者接收到的消息属性："+textMessage.getStringProperty("c01"));
                     } catch (JMSException e) {
                         e.printStackTrace();
                     }
