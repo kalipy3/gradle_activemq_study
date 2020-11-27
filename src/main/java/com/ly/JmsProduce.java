@@ -5,6 +5,7 @@ package com.ly;
 
 import javax.jms.Connection;
 import javax.jms.JMSException;
+import javax.jms.MapMessage;
 import javax.jms.MessageProducer;
 import javax.jms.Queue;
 import javax.jms.Session;
@@ -36,6 +37,10 @@ public class JmsProduce {
             //7.创建消息
             TextMessage textMessage = session.createTextMessage("msg---" + i);
             messageProducer.send(textMessage);
+
+            MapMessage mapMessage = session.createMapMessage();
+            mapMessage.setString("k1", "mapMessage---v1");
+            messageProducer.send(mapMessage);
         }
 
         messageProducer.close();
