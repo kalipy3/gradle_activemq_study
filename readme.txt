@@ -11,8 +11,19 @@ readme.txt
         <transportConnector name="nio" uri="nio://0.0.0.0:61818?trace=true" />
 
     生产和消费两端协议代码修改
-        public static final String ACTIVEMQ_URL = "nio://127.0.0.1:61618"
+        public static final String ACTIVEMQ_URL = "nio://127.0.0.1:61618"//注意：此端口号与配置文件的对应
 
     运行验证
         重启activemq服务器，127.0.0.1:8161/admin/connections.jsp页面出现Connector nio
         消费者与生产者也正常运行
+
+
+
+3.问题：
+    上述NIO性能已经不错了，如何进一步优化？即怎么让同一个端口既支持NIO,又支持其它多个协议？
+  解决：
+    使用auto +
+    <transportConnector name="auto+nio" uri="auto+nio://0.0.0.0:61608"/>
+
+
+        
