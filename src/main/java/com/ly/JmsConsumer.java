@@ -22,8 +22,8 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 
 public class JmsConsumer
 {
-   // public static final String ACTIVEMQ_URL = "tcp://127.0.0.1:61616";
-    public static final String ACTIVEMQ_URL = "nio://127.0.0.1:61608";
+    public static final String ACTIVEMQ_URL = "tcp://127.0.0.1:61616";
+    //public static final String ACTIVEMQ_URL = "nio://127.0.0.1:61608";
     public static final String QUEUE_NAME = "queue01";
 
     public static void main(String[] args) throws JMSException, IOException, Exception  {
