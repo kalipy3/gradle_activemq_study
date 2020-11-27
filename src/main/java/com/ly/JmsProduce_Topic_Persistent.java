@@ -4,6 +4,7 @@
 package com.ly;
 
 import javax.jms.Connection;
+import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Queue;
@@ -13,16 +14,15 @@ import javax.jms.Topic;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 
-public class JmsProduce_Topic {
+public class JmsProduce_Topic_Persistent {
     public static final String ACTIVEMQ_URL = "tcp://127.0.0.1:61616";
-    public static String TOPIC_NAME = "topic-atkalipy";
+    public static String TOPIC_NAME = "topic-jdbc-persistent";
 
     public static void main(String[] args) throws JMSException {
         //1.创建连接工厂，采用默认的用户名和密码
         ActiveMQConnectionFactory activeMQConnectionFactory = new ActiveMQConnectionFactory();
         //2.获取connection
         Connection  connection = activeMQConnectionFactory.createConnection();
-        connection.start();
 
         //3.两个参数，分别为事务/签收
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -32,8 +32,13 @@ public class JmsProduce_Topic {
         //5.创建消息的生产者
         MessageProducer messageProducer = session.createProducer(topic);
 
+        //5.1 要用持久化订阅，发送消息者要用DeliveryMode.PERSISTENT模式且在连接之前设定
+        messageProducer.setDeliveryMode(DeliveryMode.PERSISTENT);
+        //5.2 一定要设置完成持久化后在start这个connection
+        connection.start();
+
         //6.生产三条消息发送到mq队列
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= 6; i++) {
             //7.创建消息
             TextMessage textMessage = session.createTextMessage("TOPIC_msg---" + i);
             messageProducer.send(textMessage);

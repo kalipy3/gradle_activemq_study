@@ -40,7 +40,8 @@ JDBC消息存储：
         一定要开启setDeliveryMode()持久化
 
     7.查看数据库情况
-
+        queue看activemq_msgs表数据变化
+        topic看activemq_acks表数据变化
 
 在点对点模型(queue)中
     当DeliveryMode设置为NON_PERSISTENCE时，消息被保存在内存中
@@ -48,3 +49,16 @@ JDBC消息存储：
 
     消息一旦被消费，就会从broker或DB中删除
 
+   
+
+总结：
+    如果是queue
+        在没有消费者消费的情况下会将消息保存到activemq_msgs表，只要有任意一个消费者已经消费过了，消费之后这些消息将立即被删除
+
+    如果是topic
+        一般是先启动消费者订阅，然后再生产的情况下会将消息保存到activemq_acks表
+
+
+开发中的一些坑：
+    "java.lang.lllegalStateException:BeanFactory not initialized or already closed"
+    这是因为你的操作系统的机器名有下划线符号，该机器名后重启即可
